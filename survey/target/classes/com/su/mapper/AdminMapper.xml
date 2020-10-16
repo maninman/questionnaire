@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.su.mapper.AdminDao">
+
+    <resultMap id="AdminMap" type="com.su.entity.Admin">
+        <id column="admin_id" property="admin_id"/>
+        <result column="admin_account" property="admin_account"/>
+        <result column="admin_passwd" property="admin_passwd"/>
+        <result column="admin_name" property="admin_name"/>
+        <result column="admin_phone" property="admin_phone"/>
+    </resultMap>
+    <insert id="create" parameterType="com.su.entity.Admin" keyProperty="admin_id" useGeneratedKeys="true">
+        insert into survey_admin(admin_account,admin_passwd,admin_name,admin_phone) values (#{admin_account},#{admin_passwd},#{admin_name},#{admin_phone})
+    </insert>
+
+    <sql id="AdminFindCriteria">
+        <where>
+            <if test="admin_id != null">admin_id = #{admin_id}</if>
+            <if test="admin_account != null">admin_account = #{admin_account}</if>
+            <if test="admin_passwd != null">admin_passwd = #{admin_passwd}</if>
+            <if test="admin_name != null">admin_name = #{admin_name}</if>
+            <if test="admin_phone != null">admin_phone = #{admin_phone}</if>
+        </where>
+        
+    </sql>
+    <delete id="delete">
+        delete from survey_admin
+        <include refid="AdminFindCriteria"/>
+    </delete>
+    
+<!--    查询select-->
+    
+    <select id="count" resultType="int">
+        select count(1) from survey_admin
+        <include refid="AdminFindCriteria"/>
+    </select>
+
+    <select id="query" resultMap="AdminMap">
+        select * from survey_admin
+        <include refid="AdminFindCriteria"/>
+    </select>
+
+<!--    查询明细-->
+    <select id="detail" resultMap="AdminMap">
+        select * from survey_admin
+        <include refid="AdminFindCriteria"/>
+        limit 1
+    </select>
+
+    <update id="update">
+        update survey_admin
+
+        <include refid="AdminUpdateCriteria"/>
+        <include refid="AdminFindCriteria"/>
+    </update>
+
+    <sql id="AdminUpdateCriteria">
+        <set>
+            <if test="admin_id != null">admin_id = #{admin_id},</if>
+            <if test="admin_account != null">admin_account = #{admin_account},</if>
+            <if test="admin_passwd != null">admin_passwd = #{admin_passwd},</if>
+            <if test="admin_name != null">admin_name = #{admin_name},</if>
+            <if test="admin_phone != null">admin_phone = #{admin_phone},</if>
+        </set>
+
+    </sql>
+</mapper>
